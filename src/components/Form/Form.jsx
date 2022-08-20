@@ -1,21 +1,21 @@
-import { nanoid } from 'nanoid';
-import { useSelector, useDispatch } from 'react-redux';
 import { FormContact, Input, Label } from 'components/Form/Form.styled';
 import { Formik } from 'formik';
-import { addContact } from 'redux/userSlice';
+import {
+  useGetContactsQuery,
+  useAddContactMutation,
+} from 'redux/contactsSlice';
 
 const initialValues = {
   name: '',
-  number: '',
+  phone: '',
 };
 
 export const FormContacts = () => {
-  const dispatch = useDispatch();
-  const items = useSelector(state => state.contacts.items);
+  const { data } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
 
-  const formSubmit = (values, { resetForm }) => {
-    values.id = nanoid();
-    const some = items.some(
+  const formSubmit = async (values, { resetForm }) => {
+    const some = data.some(
       cont => cont.name.toLowerCase() === values.name.toLowerCase()
     );
     if (some) {
@@ -23,7 +23,7 @@ export const FormContacts = () => {
       resetForm();
       return;
     }
-    dispatch(addContact(values));
+    await addContact(values);
     resetForm();
   };
 
@@ -44,7 +44,7 @@ export const FormContacts = () => {
           Number
           <Input
             type="tel"
-            name="number"
+            name="phone"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required

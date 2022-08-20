@@ -1,15 +1,17 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/userSlice';
+import { useDeleteContactMutation } from 'redux/contactsSlice';
 
 export const ContactsItem = ({ id, name, number }) => {
-  const dispatch = useDispatch();
+  const [deleteContact] = useDeleteContactMutation();
+  const onDelete = async () => {
+    await deleteContact(id);
+  };
   return (
     <li>
       <p>
         {name}: {number}
       </p>
-      <button onClick={() => dispatch(deleteContact(id))}>Удалить</button>
+      <button onClick={onDelete}>Удалить</button>
     </li>
   );
 };

@@ -4,7 +4,7 @@ import { changeFilter } from 'redux/userSlice';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(state => state.contacts.filter);
+  const filter = useSelector(state => state.filter);
   return (
     <Label>
       Find contacts by name
